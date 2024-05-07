@@ -2,9 +2,9 @@ name: "Custom Output S3 Sync"
 description: "Sync a directory to an AWS S3 repository"
 author: meybesomeday
 outputs:
-  data:
+  urls:
     description: "Command output from aws s3 sync"
-    value: ${{ steps.sync.outputs.data }}
+    value: ${{ steps.sync.outputs.urls }}
 runs:
   using: docker
   image: Dockerfile

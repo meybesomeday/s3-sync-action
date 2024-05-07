@@ -63,6 +63,6 @@ list=$(echo "$data" | awk -v BASE_URL=${BASE_URL} '/^.*delete:/ { gsub(/^.*\*\*\
                           printf("%s,", URLS[KEY]) }')
 echo "$list"
 EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
-echo "list<<$EOF" >> $GITHUB_OUTPUT
+echo "urls<<$EOF" >> $GITHUB_OUTPUT
 echo "$list" >> $GITHUB_OUTPUT
 echo "$EOF" >> $GITHUB_OUTPUT
