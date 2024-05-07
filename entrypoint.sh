@@ -58,7 +58,7 @@ text
 EOF
 
 echo "$data"
-list=$(echo "$data" | awk -v BASE_URL=${BASE_URL} '/^.*delete:/ { gsub(/^.*\*\*\*/, BASE_URL, $3); \
+list=$(echo "$data" | awk -v BASE_URL=${BASE_URL} '/^.*delete:/ { sub(/^.*\*\*\*/, BASE_URL, $3); \
                           URLS[KEY]=$3; KEY++ } END { for (KEY in URLS) \
                           printf("%s,", URLS[KEY]) }')
 echo "$list"
