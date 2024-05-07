@@ -45,10 +45,6 @@ data=$(sh -c "aws s3 sync ${SOURCE_DIR:-.} s3://${AWS_S3_BUCKET}/${DEST_DIR} \
               --dryrun \
               ${ENDPOINT_APPEND} $*")
 
-echo $data
-EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
-echo "data<<$EOF" >> $GITHUB_OUTPUT
-echo "$data" >> $GITHUB_OUTPUT
 echo "$EOF" >> $GITHUB_OUTPUT
 
 # Clear out credentials after we're done.
@@ -61,3 +57,12 @@ null
 null
 text
 EOF
+
+echo "$data"
+list=$(echo "$data" | awk '/^.*delete:/ { gsub(/^.*\*\*\*/, ENVIRON["BASE_URL"], $3); \
+                          URLS[KEY]=$3; KEY++ } END { for (KEY in URLS) \
+                          printf("%s,", URLS[KEY]) }')
+echo "$list"
+EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
+echo "list<<$EOF" >> $GITHUB_OUTPUT
+echo "$data" >> $GITHUB_OUTPUT
