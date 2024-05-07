@@ -44,7 +44,11 @@ data=$(sh -c "aws s3 sync ${SOURCE_DIR:-.} s3://${AWS_S3_BUCKET}/${DEST_DIR} \
               --no-progress \
               --dryrun \
               ${ENDPOINT_APPEND} $*")
+
+EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
+echo "text<<$EOF" >> $GITHUB_OUTPUT
 echo "data=$data" >> $GITHUB_OUTPUT
+echo "$EOF" >> $GITHUB_OUTPUT
 
 # Clear out credentials after we're done.
 # We need to re-run `aws configure` with bogus input instead of
