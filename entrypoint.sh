@@ -45,7 +45,6 @@ data=$(sh -c "aws s3 sync ${SOURCE_DIR:-.} s3://${AWS_S3_BUCKET}/${DEST_DIR} \
               --dryrun \
               ${ENDPOINT_APPEND} $*")
 
-echo "$EOF" >> $GITHUB_OUTPUT
 
 # Clear out credentials after we're done.
 # We need to re-run `aws configure` with bogus input instead of
@@ -65,4 +64,5 @@ list=$(echo "$data" | awk '/^.*delete:/ { gsub(/^.*\*\*\*/, ENVIRON["BASE_URL"],
 echo "$list"
 EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
 echo "list<<$EOF" >> $GITHUB_OUTPUT
-echo "$data" >> $GITHUB_OUTPUT
+echo "$list" >> $GITHUB_OUTPUT
+echo "$EOF" >> $GITHUB_OUTPUT
