@@ -39,16 +39,17 @@ EOF
 
 # Sync using our dedicated profile and suppress verbose messages.
 # All other flags are optional via the `args:` directive.
-sh -c "aws s3 sync ${SOURCE_DIR:-.} s3://${AWS_S3_BUCKET}/${DEST_DIR} \
+data=$(sh -c "aws s3 sync ${SOURCE_DIR:-.} s3://${AWS_S3_BUCKET}/${DEST_DIR} \
               --profile s3-sync-action \
               --no-progress \
               --dryrun \
-              ${ENDPOINT_APPEND} $*"
+              ${ENDPOINT_APPEND} $*")
 
-# EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
-# echo "text<<$EOF" >> $GITHUB_OUTPUT
-# echo "data=$data" >> $GITHUB_OUTPUT
-# echo "$EOF" >> $GITHUB_OUTPUT
+echo $data
+EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
+echo "data<<$EOF" >> $GITHUB_OUTPUT
+echo "$data" >> $GITHUB_OUTPUT
+echo "$EOF" >> $GITHUB_OUTPUT
 
 # Clear out credentials after we're done.
 # We need to re-run `aws configure` with bogus input instead of
