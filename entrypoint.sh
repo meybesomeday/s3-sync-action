@@ -57,9 +57,11 @@ null
 text
 EOF
 
-list=$(echo "$data" | awk -v BASE_URL=${BASE_URL} -v AWS_DIR=${AWS_S3_BUCKET} '/^.*delete:/ && !/bundle/ { sub("^.*s3://"AWS_DIR, BASE_URL, $3); \
+list=$(echo "$data" | awk -v BASE_URL=${BASE_URL} -v AWS_DIR=${AWS_S3_BUCKET} 'BEGIN { FIRST=1 } \
+                          /^.*delete:/ && !/bundle/ { sub("^.*s3://"AWS_DIR, BASE_URL, $3); \
                           URLS[KEY]=$3; KEY++ } END { for (KEY in URLS) \
-                          printf("%s%s", SEP, URLS[KEY], SEP=",") }')
+                          if (FIRST) { FIRST=0; printf("%s", URLS[KEY]) } \
+                          else { printf(",%s", URLS[KEY]) } }')
 EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
 echo "urls<<$EOF" >> $GITHUB_OUTPUT
 echo "[$list]" >> $GITHUB_OUTPUT
