@@ -64,5 +64,5 @@ list=$(echo "$data" | awk -v BASE_URL=${BASE_URL} -v AWS_DIR=${AWS_S3_BUCKET} 'B
                           else { printf(",%s", URLS[KEY]) } }')
 EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
 echo "urls<<$EOF" >> $GITHUB_OUTPUT
-echo "[$list]" >> $GITHUB_OUTPUT
+echo "$list" >> $GITHUB_OUTPUT
 echo "$EOF" >> $GITHUB_OUTPUT
